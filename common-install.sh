@@ -10,7 +10,7 @@ YUM_ARGS="--setopt=tsflags=nodocs"
 # - iproute needed for ip command to get ip addresses	+ADD run.sh fluentd.conf.template passwd.template fluentd-check.sh ${HOME}/
 # - nss_wrapper used to support username identity	+ADD common-*.sh /tmp/
 # - bc for calculations in run.conf
-PACKAGES="gem gcc-c++ libcurl-devel make bc gettext nss_wrapper hostname iproute"
+PACKAGES="gem gcc-c++ libcurl-devel make bc gettext nss_wrapper hostname iproute nss_wrapper epel-release"
 
 # ruby packages
 PACKAGES="${PACKAGES} rh-ruby22 rh-ruby22-rubygems rh-ruby22-ruby-devel ruby-devel"
@@ -40,7 +40,7 @@ yum update -y
 
 # install all required packages
 #yum install -y $YUM_ARGS $PACKAGES
-yum install -y $PACKAGES
+yum install -y --nogpgcheck $PACKAGES
 
 # clean up yum to make sure image isn't larger because of installations/updates
 yum clean all
