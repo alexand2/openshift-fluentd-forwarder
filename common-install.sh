@@ -13,17 +13,17 @@ YUM_ARGS="--setopt=tsflags=nodocs"
 PACKAGES="gem gcc-c++ libcurl-devel make bc gettext nss_wrapper hostname iproute"
 
 # ruby packages
-PACKAGES="${PACKAGES} rh-ruby22 rh-ruby22-rubygems rh-ruby22-ruby-devel"
+PACKAGES="${PACKAGES} rh-ruby22 rh-ruby22-rubygems rh-ruby22-ruby-devel ruby-devel"
 
 # if the release is a red hat version then we need to set additional arguments for yum repositories
 RED_HAT_MATCH='^Red Hat.*$'
-if [[ $RELEASE =~ $RED_HAT_MATCH && -z "$USE_SYSTEM_REPOS" ]]; then
+#if [[ $RELEASE =~ $RED_HAT_MATCH && -z "$USE_SYSTEM_REPOS" ]]; then
   #NOTE: Until the first yum command is run, /etc/yum.repos.d/redhat.repo contains no repositories, so yum-config-manager will not enable/disable anything.
   #This command will force the population of said file, see #https://access.redhat.com/solutions/1443553
-  yum repolist --disablerepo=* && yum-config-manager --disable \* > /dev/null
+  #yum repolist --disablerepo=* && yum-config-manager --disable \* > /dev/null
   #Set YUM_ARGS
-  YUM_ARGS="${YUM_ARGS} --enablerepo=rhel-7-server-rpms --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=rhel-7-server-optional-rpms"
-fi
+  #YUM_ARGS="${YUM_ARGS} --enablerepo=rhel-7-server-rpms --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=rhel-7-server-optional-rpms"
+#fi
 
 # enable epel when on CentOS
 CENTOS_MATCH='^CentOS.*'
@@ -33,10 +33,14 @@ if [[ $RELEASE =~ $CENTOS_MATCH && -z "$USE_SYSTEM_REPOS" ]]; then
 fi
 
 # ensure latest versions
-yum update $YUM_ARGS -y
+#yum update $YUM_ARGS -y
+#yum repolist
+#yum downgrade -y libstdc++-devel libstdc++ glibc glibc-common nss nss-softokn-freebl nss-tools nss-sysinit java nss-softokn java-1.8.0-openjdk-headless libcurl curl nss-pem libgomp libc-common libstdc++-devel libstdc++ && yum update -y
+yum update -y 
 
 # install all required packages
-yum install -y $YUM_ARGS $PACKAGES
+#yum install -y $YUM_ARGS $PACKAGES
+yum install -y $PACKAGES
 
 # clean up yum to make sure image isn't larger because of installations/updates
 yum clean all
